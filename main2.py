@@ -3,13 +3,13 @@ import mysql.connector
 import string
 
 def affine_encrypt(plaintext, a, b):
-    alphabet = string.digits + string.ascii_uppercase  # Gunakan digit dan huruf uppercase saja
+    alphabet = string.digits + string.ascii_uppercase  
     encrypted_text = ""
     for char in plaintext:
         if char.isalnum(): 
-            if char.isdigit():  # Angka tetap
+            if char.isdigit(): 
                 x = alphabet.index(char)
-            else:  # Huruf
+            else: 
                 x = alphabet.index(char.upper())
             encrypted_text += alphabet[(a * x + b) % len(alphabet)]
         else:
@@ -25,7 +25,7 @@ def affine_decrypt(ciphertext, a, b):
     decrypted_text = ""
     for char in ciphertext:
         if char.isalnum():
-            if char.isdigit():  # Angka tetap
+            if char.isdigit(): 
                 x = alphabet.index(char)
             else:  # Huruf
                 x = alphabet.index(char.upper())
@@ -66,21 +66,19 @@ def columnar_encrypt(chippertext, key):
     n = len(key)
     m = len(chippertext)
     num_columns = n
-    num_rows = m // n + (m % n > 0)  # jumlah baris
+    num_rows = m // n + (m % n > 0)  
     encrypted_text = [''] * n
     
-    # Mengurutkan kunci
-    sorted_key = sorted(enumerate(key), key=lambda x: x[1])  # Sorting berdasarkan kunci
-    key_order = [k[0] for k in sorted_key]  # Menyimpan urutan index berdasarkan kunci yang sudah disort
+    sorted_key = sorted(enumerate(key), key=lambda x: x[1])  
+    key_order = [k[0] for k in sorted_key]  
     
-    # Mengisi kolom sesuai urutan key
     for i, k in enumerate(key_order):
         for j in range(num_rows):
             idx = j * n + k
             if idx < m:
                 encrypted_text[i] += chippertext[idx]
             else:
-                encrypted_text[i] += 'x'  # Isi dengan 'x' jika ada kekosongan
+                encrypted_text[i] += 'x'
     
     return ''.join(encrypted_text)
 
@@ -88,14 +86,12 @@ def columnar_decrypt(encrypted_text, key):
     n = len(key)
     m = len(encrypted_text)
     num_columns = n
-    num_rows = m // n  # jumlah baris
+    num_rows = m // n 
     decrypted_text = [''] * (num_rows * n)
     
-    # Mengurutkan kunci
-    sorted_key = sorted(enumerate(key), key=lambda x: x[1])  # Sorting berdasarkan kunci
-    key_order = [k[0] for k in sorted_key]  # Menyimpan urutan index berdasarkan kunci yang sudah disort
+    sorted_key = sorted(enumerate(key), key=lambda x: x[1]) 
+    key_order = [k[0] for k in sorted_key] 
     
-    # Membaca kolom sesuai urutan kunci
     index = 0
     for i, k in enumerate(key_order):
         for j in range(num_rows):
@@ -117,18 +113,16 @@ def register():
                 st.error("Password hanya boleh mengandung angka dan huruf!")
                 return
 
-            user_digits = username[-4:]  # 4 digit terakhir dari username
-            key_digits = [int(char) for char in user_digits]  # Konversi ke list angka
+            user_digits = username[-4:]  
+            key_digits = [int(char) for char in user_digits]  
             
-            user_digit = username[-2:]  # 2 digit terakhir dari username
+            user_digit = username[-2:] 
 
-            # Menghitung nilai a sebagai bilangan berikutnya dari dua digit terakhir
             a = next_prime(int(user_digit)) 
-            b = int(user_digit)  # 2 digit terakhir sebagai b
+            b = int(user_digit)  
 
             encrypted_password = affine_encrypt(password, a, b)
 
-            # Enkripsi columnar menggunakan key dari 4 digit terakhir username
             columnar_encrypted_password = columnar_encrypt(encrypted_password, key_digits)
 
             conn = get_db_connection()
