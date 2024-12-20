@@ -5,7 +5,7 @@ program enkripsi password berdasarkan username menggunakan Affine Chipper dan Co
 
 - 140810220011 (Panji) 
 - 140810220059 (Ilham)
-- 1408102200 (jaya)
+- 140810220082 (jaya)
 
 ### Cara kerja Register
 
@@ -16,7 +16,7 @@ program enkripsi password berdasarkan username menggunakan Affine Chipper dan Co
 - enkripsikan hasil affine chipper dengan columnar chipper menggunakan `key` tadi
 - masukan ke database
 
-### Cara kerja Register
+### Cara kerja Login
 
 - memasukan `username` berupa angka dan `password` berupa huruf atau angka
 - ambil `password` dari database
